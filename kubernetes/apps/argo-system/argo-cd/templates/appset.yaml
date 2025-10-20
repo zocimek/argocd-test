@@ -37,7 +37,7 @@ spec:
       sources:
         {{- if .repoURL }}
         - repoURL: "{{ .repoURL }}"
-          targetRevision: "{{ .chartVersion }}"
+          targetRevision: "{{ .chartVersion | default .version }}"
           chart: "{{ .chartName | default .name }}"
           helm:
             releaseName: "{{ .name }}"
