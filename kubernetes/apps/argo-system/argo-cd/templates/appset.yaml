@@ -80,13 +80,6 @@ spec:
             duration: 10s
             factor: 1
         {{- end }}
-        {{- with .psp }}
-        managedNamespaceMetadata:
-          labels:
-            pod-security.kubernetes.io/enforce: "{{ . }}"
-            pod-security.kubernetes.io/audit: "{{ . }}"
-            pod-security.kubernetes.io/warn: "{{ . }}"
-        {{- end }}
       {{- if .ignoreDifferences }}
       ignoreDifferences:
         {{- .ignoreDifferences | nindent 4 }}
