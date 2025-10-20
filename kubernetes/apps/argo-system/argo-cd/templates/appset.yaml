@@ -10,7 +10,7 @@ spec:
     - "missingkey=invalid"
   generators:
     - git:
-        repoURL: https://github.com/zocimek/argocd-test.gitocimek/argocd-test
+        repoURL: https://github.com/zocimek/argocd-test.git
         revision: main
         files:
           - path: kubernetes/apps/*/app.yaml
@@ -36,12 +36,12 @@ spec:
     spec:
       sources:
         {{- if .withKustomize }}
-        - repoURL: {{ .repoURL | default "https://github.com/zocimek/argocd-test.gitocimek/argocd-test" }}
+        - repoURL: {{ .repoURL | default "https://github.com/zocimek/argocd-test.git" }}
           targetRevision: {{ .version | default "staging" }}
           path: "{{ .repoPath }}"
           kustomize: {}
         {{- end }}
-        - repoURL: https://github.com/zocimek/argocd-test.gitocimek/argocd-test
+        - repoURL: https://github.com/zocimek/argocd-test.git
           path: kubernetes/apps
           targetRevision: main
           directory:

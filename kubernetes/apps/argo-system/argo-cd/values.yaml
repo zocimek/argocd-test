@@ -23,7 +23,7 @@ configs:
     gitops:
       name: k8s-gitops
       type: git
-      url: https://github.com/zocimek/argocd-test.gitocimek/argocd-test
+      url: https://github.com/zocimek/argocd-test.git
   cm:
     statusbadge.enabled: true
     kustomize.buildOptions: "--enable-alpha-plugins --enable-exec"
