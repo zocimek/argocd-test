@@ -35,6 +35,18 @@ spec:
         {{- end }}
     spec:
       sources:
+        {{- if .repoURL }}
+        - repoURL: "{{ .repoURL }}"
+          targetRevision: "{{ .chartVersion }}"
+          chart: "{{ .chartName | default .name }}"
+          helm:
+            releaseName: "{{ .name }}"
+            valuesFiles:
+            - $repo/{{ .namespace }}/{{ .name }}/values.yaml
+        - repoURL: https://github.com/zocimek/argocd-test.git
+          targetRevision: main
+          ref: repo
+        {{- end }}
         {{- if .withKustomize }}
         - repoURL: {{ .repoURL | default "https://github.com/zocimek/argocd-test.git" }}
           targetRevision: {{ .version | default "staging" }}
