@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/argoproj.io/applicationset_v1alpha1.json
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: home-ops-apps
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - "missingkey=invalid"
+  generators:
+    - git:
+        repoURL: https://github.com/zocimek/argocd-test.git/zocimek/argocd-test
+        revision: main
+        files:
+          - path: kubernetes/apps/*/app.yaml
+  template:
+    metadata:
+      name: "{{ .name }}"
+      namespace: argocd
+    spec:
+      destination:
+        namespace: "{{ .namespace }}"
+        server: https://kubernetes.default.svc
+      project: default
+  templatePatch: |-
+    metadata:
+      annotations:
+        argocd.argoproj.io/appset: "true"
+        {{- if .serverSideApply }}
+        argocd.argoproj.io/compare-options: ServerSideDiff=true
+        {{- end }}
+        {{- range $k, $v := .annotations }}
+        {{ $k }}: {{ $v }}
+        {{- end }}
+    spec:
+      sources:
+        {{- if .withKustomize }}
+        - repoURL: {{ .repoURL | default "https://github.com/zocimek/argocd-test.git/zocimek/argocd-test" }}
+          targetRevision: {{ .version | default "staging" }}
+          path: "{{ .repoPath }}"
+          kustomize: {}
+        {{- end }}
+        - repoURL: https://github.com/zocimek/argocd-test.git/zocimek/argocd-test
+          path: kubernetes/apps
+          targetRevision: main
+          directory:
+            recurse: true
+            include: '{{ .namespace }}/{{ .name }}/templates/*.yaml'
+      syncPolicy:
+        automated:
+          prune: true
+          {{- if .selfHeal }}
+          selfHeal: true
+          {{- end }}
+        syncOptions:
+          - CreateNamespace=true
+          {{- if .serverSideApply }}
+          - ServerSideApply=true
+          {{- end }}
+          {{- range $opt := .syncOptions }}
+          - "{{ $opt }}"
+          {{- end }}
+        {{- with .retries }}
+        retry:
+          limit: {{ . }}
+          backoff:
+            duration: 10s
+            factor: 1
+        {{- end }}
+        {{- with .psp }}
+        managedNamespaceMetadata:
+          labels:
+            pod-security.kubernetes.io/enforce: "{{ . }}"
+            pod-security.kubernetes.io/audit: "{{ . }}"
+            pod-security.kubernetes.io/warn: "{{ . }}"
+        {{- end }}
+      {{- if .ignoreDifferences }}
+      ignoreDifferences:
+        {{- .ignoreDifferences | nindent 4 }}
+      {{- end }}

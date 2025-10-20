@@ -1,0 +1,75 @@
+---
+# yamllint disable rule:line-length
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/namespace-v1.json
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-system
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/warn: privileged
+
+---
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/namespace-v1.json
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argo-system
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+
+---
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/namespace-v1.json
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+
+
+---
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/namespace-v1.json
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-secrets
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+
+---
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/secret-v1.json
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-secret
+  namespace: argo-system
+stringData:
+  admin.password: {{ ENV.ARGOCD_ADMIN_PASSWORD_ENCRYPTED }}
+  admin.passwordMtime: "2025-10-19T09:16:23Z"
+  oidc.authelia.clientID: {{ ENV.ARGOCD_OIDC_CLIENT_ID }}
+  oidc.authelia.clientSecret: {{ ENV.ARGOCD_OIDC_CLIENT_SECRET }}
+  server.secretkey: {{ ENV.ARGOCD_SERVER_SECRETKEY }}
+  webhook.github.secret: {{ ENV.ARGOCD_WEBHOOK_SECRET }}
+
+---
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.34.1/secret-v1.json
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloudflare-issuer-secret
+  namespace: cert-manager
+stringData:
+  CF_API_KEY: {{ ENV.CLOUDFLARE_DNS_TOKEN }}

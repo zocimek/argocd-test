@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=../../../../schemas/argocd.json
+namespace: argo-system
+name: argo-cd
+repoURL: oci://ghcr.io/argoproj/argo-helm/argo-cd
+version: 8.6.4
+psp: restricted
+ignoreDifferences: |-
+  - group: ""
+    kind: Secret
+    name: argocd-secret
+    jsonPointers:
+      - "/data"

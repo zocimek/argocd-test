@@ -1,0 +1,2 @@
+{{- $base := (fromYaml (readFile (printf "../../../kubernetes/apps/%s/%s/values.yaml" .Release.Namespace .Release.Name))) }}
+{{ $base | toYaml }}

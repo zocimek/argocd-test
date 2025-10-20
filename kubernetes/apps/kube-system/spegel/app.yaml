@@ -1,0 +1,6 @@
+---
+# yaml-language-server: $schema=../../../../schemas/argocd.json
+namespace: kube-system
+name: spegel
+repoURL: oci://ghcr.io/spegel-org/helm-charts/spegel
+version: 0.4.0

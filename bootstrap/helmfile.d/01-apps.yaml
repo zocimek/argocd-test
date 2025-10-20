@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+helmDefaults:
+  cleanupOnFail: true
+  wait: true
+  waitForJobs: true
+releases:
+  - name: cilium
+    namespace: kube-system
+    chart: oci://ghcr.io/home-operations/charts-mirror/cilium
+    version: 1.18.2
+    values:
+      - ./templates/values.yaml.gotmpl
+      - hubble: # hubble wouldn't work at this stage
+          enabled: false
+          relay:
+            enabled: false
+          ui:
+            enabled: false
+    hooks:
+      # Wait for cilium CRDs to be available
+      - events:
+          - "postsync"
+        command: bash
+        args:
+          - -c
+          - >-
+            until kubectl get crd ciliumbgpadvertisements.cilium.io ciliumbgppeerconfigs.cilium.io
+            ciliumbgpclusterconfigs.cilium.io ciliuml2announcementpolicies.cilium.io ciliumloadbalancerippools.cilium.io &>/dev/null; do sleep 5; done
+        showlogs: true
+      - events:
+          - "cleanup"
+        command: bash
+        args:
+          - -c
+          - >-
+            kubectl apply --server-side --field-manager=bootstrap
+            --filename ../../kubernetes/apps/kube-system/cilium/templates/network-config.yaml
+            --wait=true
+        showlogs: true
+  - name: coredns
+    namespace: kube-system
+    chart: oci://ghcr.io/coredns/charts/coredns
+    version: 1.45.0
+    values:
+      - ./templates/values.yaml.gotmpl
+    needs:
+      - kube-system/cilium
+  - name: spegel
+    namespace: kube-system
+    chart: oci://ghcr.io/spegel-org/helm-charts/spegel
+    version: 0.4.0
+    values:
+      - ./templates/values.yaml.gotmpl
+    needs:
+      - kube-system/coredns
+  - name: external-secrets
+    namespace: external-secrets
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 0.20.3
+    values:
+      - ./templates/values.yaml.gotmpl
+    needs:
+      - kube-system/spegel
+  - name: argo-cd
+    namespace: argo-system
+    chart: oci://ghcr.io/argoproj/argo-helm/argo-cd
+    version: 9.0.3
+    values:
+      - ./templates/values.yaml.gotmpl
+    hooks:
+      - events:
+          - "presync"
+        command: bash
+        args:
+          - -c
+          - >-
+            kubectl apply --server-side --field-manager=bootstrap -n argo-system
+            --filename ../../kubernetes/apps/argo-system/argo-cd/templates/network-policy.yaml
+            --wait=true
+        showlogs: true

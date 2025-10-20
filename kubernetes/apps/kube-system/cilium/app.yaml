@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=../../../../schemas/argocd.json
+namespace: kube-system
+name: cilium
+repoURL: oci://ghcr.io/home-operations/charts-mirror/cilium
+version: 1.18.2
+psp: privileged
+syncOptions:
+  # grafana dashboard is a big resource
+  - ServerSideApply=true
+ignoreDifferences: |-
+  - kind: Secret
+    group: ""
+    name: cilium-ca
+    jsonPointers:
+      - "/data"
+  - kind: Secret
+    group: ""
+    name: hubble-relay-client-certs
+    jsonPointers:
+      - "/data"
+  - kind: Secret
+    group: ""
+    name: hubble-server-certs
+    jsonPointers:
+      - "/data"
+  - kind: Secret
+    group: ""
+    name: hubble-server-certs
+    jsonPointers:
+      - "/data"
+  - kind: ServiceMonitor
+    group: monitoring.coreos.com
+    jqPathExpressions:
+      - ".spec.endpoints[].relabelings[].action"
