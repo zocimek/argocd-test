@@ -68,14 +68,14 @@ releases:
     version: 9.0.3
     values:
       - ./templates/values.yaml.gotmpl
-    hooks:
-      - events:
-          - "presync"
-        command: bash
-        args:
-          - -c
-          - >-
-            kubectl apply --server-side --field-manager=bootstrap -n argo-system
-            --filename ../../kubernetes/apps/argo-system/argo-cd/templates/network-policy.yaml
-            --wait=true
-        showlogs: true
+    # hooks:
+    #   - events:
+    #       - "presync"
+    #     command: bash
+    #     args:
+    #       - -c
+    #       - >-
+    #         kubectl apply --server-side --field-manager=bootstrap -n argo-system
+    #         --filename ../../kubernetes/apps/argo-system/argo-cd/templates/network-policy.yaml
+    #         --wait=true
+    #     showlogs: true
