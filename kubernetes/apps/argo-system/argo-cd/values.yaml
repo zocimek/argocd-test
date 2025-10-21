@@ -149,64 +149,64 @@ repoServer:
         - secrets
       verbs:
         - get
-  env:
-    - name: HELM_PLUGINS
-      value: /custom-tools/helm-plugins/
-    - name: HELM_SECRETS_CURL_PATH
-      value: /custom-tools/curl
-    - name: HELM_SECRETS_SOPS_PATH
-      value: /custom-tools/sops
-    - name: HELM_SECRETS_VALS_PATH
-      value: /custom-tools/vals
-    - name: HELM_SECRETS_KUBECTL_PATH
-      value: /custom-tools/kubectl
-    - name: HELM_SECRETS_BACKEND
-      value: sops
-    # https://github.com/jkroepke/helm-secrets/wiki/Security-in-shared-environments
-    - name: HELM_SECRETS_VALUES_ALLOW_SYMLINKS
-      value: "false"
-    - name: HELM_SECRETS_VALUES_ALLOW_ABSOLUTE_PATH
-      value: "true"
-    - name: HELM_SECRETS_VALUES_ALLOW_PATH_TRAVERSAL
-      value: "false"
-    - name: HELM_SECRETS_WRAPPER_ENABLED
-      value: "true"
-    - name: HELM_SECRETS_DECRYPT_SECRETS_IN_TMP_DIR
-      value: "true"
-    - name: HELM_SECRETS_HELM_PATH
-      value: /usr/local/bin/helm
-  volumes:
-    - name: custom-tools
-      emptyDir: {}
-  volumeMounts:
-    - mountPath: /custom-tools
-      name: custom-tools
-    - mountPath: /usr/local/sbin/helm
-      subPath: helm
-      name: custom-tools
-    - mountPath: /usr/local/bin/kustomize
-      name: custom-tools
-      subPath: kustomize
+        # env:
+        #   - name: HELM_PLUGINS
+        #     value: /custom-tools/helm-plugins/
+        #   - name: HELM_SECRETS_CURL_PATH
+        #     value: /custom-tools/curl
+        #   - name: HELM_SECRETS_SOPS_PATH
+        #     value: /custom-tools/sops
+        #   - name: HELM_SECRETS_VALS_PATH
+        #     value: /custom-tools/vals
+        #   - name: HELM_SECRETS_KUBECTL_PATH
+        #     value: /custom-tools/kubectl
+        #   - name: HELM_SECRETS_BACKEND
+        #     value: sops
+        #   # https://github.com/jkroepke/helm-secrets/wiki/Security-in-shared-environments
+        #   - name: HELM_SECRETS_VALUES_ALLOW_SYMLINKS
+        #     value: "false"
+        #   - name: HELM_SECRETS_VALUES_ALLOW_ABSOLUTE_PATH
+        #     value: "true"
+        #   - name: HELM_SECRETS_VALUES_ALLOW_PATH_TRAVERSAL
+        #     value: "false"
+        #   - name: HELM_SECRETS_WRAPPER_ENABLED
+        #     value: "true"
+        #   - name: HELM_SECRETS_DECRYPT_SECRETS_IN_TMP_DIR
+        #     value: "true"
+        #   - name: HELM_SECRETS_HELM_PATH
+        #     value: /usr/local/bin/helm
+        # volumes:
+        #   - name: custom-tools
+        #     emptyDir: {}
+        # volumeMounts:
+        #   - mountPath: /custom-tools
+        #     name: custom-tools
+        #   - mountPath: /usr/local/sbin/helm
+        #     subPath: helm
+        #     name: custom-tools
+        #   - mountPath: /usr/local/bin/kustomize
+        #     name: custom-tools
+        #     subPath: kustomize
       # - mountPath: /usr/local/bin/ksops
       #   name: custom-tools
       #   subPath: ksops
       # - mountPath: /helm-secrets-private-keys/
-      #   name: helm-secrets-private-keys
-  initContainers:
-    - name: gitops-tools
-      image: ajaykumar4/gitops-tools:2025.8.0
-      imagePullPolicy: Always
-      command:
-        - sh
-        - -ec
-      args:
-        - |
-          mkdir -p /custom-tools/
-          cp -rf /gitops-tools/* /custom-tools
-          chmod +x /custom-tools/*
-      volumeMounts:
-        - mountPath: /custom-tools
-          name: custom-tools
+  #     #   name: helm-secrets-private-keys
+  # initContainers:
+  #   - name: gitops-tools
+  #     image: ajaykumar4/gitops-tools:2025.8.0
+  #     imagePullPolicy: Always
+  #     command:
+  #       - sh
+  #       - -ec
+  #     args:
+  #       - |
+  #         mkdir -p /custom-tools/
+  #         cp -rf /gitops-tools/* /custom-tools
+  #         chmod +x /custom-tools/*
+  #     volumeMounts:
+  #       - mountPath: /custom-tools
+  #         name: custom-tools
   metrics:
     enabled: true
     serviceMonitor:
