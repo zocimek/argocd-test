@@ -9,5 +9,5 @@ spec:
   hostnames: ["argo.ad.pospiech.dev"]
   rules:
     - backendRefs:
-        - name: argocd-server
+        - name: argo-cd-server
           port: 80
