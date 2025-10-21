@@ -4,8 +4,8 @@ metadata:
   name: argo
 spec:
   parentRefs:
-    - name: internal
-      namespace: kube-system
+    - name: envoy-internal
+      namespace: network
   hostnames: ["argo.ad.pospiech.dev"]
   rules:
     - backendRefs:

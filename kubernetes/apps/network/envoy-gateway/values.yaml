@@ -8,4 +8,3 @@ config:
       kubernetes:
         deploy:
           type: GatewayNamespace
-          # vim:ft=yaml
