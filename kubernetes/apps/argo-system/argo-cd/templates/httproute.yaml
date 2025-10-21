@@ -6,7 +6,6 @@ spec:
   parentRefs:
     - name: envoy-internal
       namespace: network
-      sectionName: http
   hostnames: ["argo.ad.pospiech.dev"]
   rules:
     - backendRefs:
