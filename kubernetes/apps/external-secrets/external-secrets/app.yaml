@@ -5,3 +5,4 @@ name: external-secrets
 repoURL: oci://ghcr.io/external-secrets/charts/external-secrets
 version: 0.20.3
 psp: restricted
+serverSideApply: true

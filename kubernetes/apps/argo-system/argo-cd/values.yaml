@@ -91,36 +91,36 @@ notifications:
   metrics:
     enabled: true
     serviceMonitor: *service-monitor
-redis-ha:
-  enabled: true
-  serviceAccount:
-    create: true
-  livenessProbe:
-    enabled: true
-  readinessProbe:
-    enabled: true
-  resources:
-    requests:
-      cpu: "50m"
-      memory: "32Mi"
-    limits:
-      memory: "1Gi"
-  exporter:
-    enabled: true
-    resources:
-      requests:
-        cpu: "50m"
-        memory: "32Mi"
-      limits:
-        memory: "1Gi"
-    livenessProbe:
-      enabled: true
-    readinessProbe:
-      enabled: true
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
+# redis-ha:
+#   enabled: false
+#   serviceAccount:
+#     create: true
+#   livenessProbe:
+#     enabled: true
+#   readinessProbe:
+#     enabled: true
+#   resources:
+#     requests:
+#       cpu: "50m"
+#       memory: "32Mi"
+#     limits:
+#       memory: "1Gi"
+#   exporter:
+#     enabled: true
+#     resources:
+#       requests:
+#         cpu: "50m"
+#         memory: "32Mi"
+#       limits:
+#         memory: "1Gi"
+#     livenessProbe:
+#       enabled: true
+#     readinessProbe:
+#       enabled: true
+#   metrics:
+#     enabled: true
+#     serviceMonitor:
+#       enabled: true
 repoServer:
   replicas: 2
   serviceAccount:
