@@ -41,7 +41,7 @@ spec:
           chart: "{{ .chartName | default .name }}"
           helm:
             releaseName: "{{ .name }}"
-            valuesFiles:
+            valueFiles:
             - $repo/{{ .namespace }}/{{ .name }}/values.yaml
         - repoURL: https://github.com/zocimek/argocd-test.git
           targetRevision: main
