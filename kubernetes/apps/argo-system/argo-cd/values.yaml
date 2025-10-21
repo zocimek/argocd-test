@@ -27,6 +27,11 @@ configs:
   cm:
     statusbadge.enabled: true
     kustomize.buildOptions: "--enable-alpha-plugins --enable-exec"
+    helm.valuesFileSchemes: >-
+      secrets+gpg-import, secrets+gpg-import-kubernetes,
+      secrets+age-import, secrets+age-import-kubernetes,
+      secrets, secrets+literal,
+      https
     # this customization make sync-waves work properly
     resource.customizations: |
       argoproj.io/Application:
