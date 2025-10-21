@@ -45,6 +45,7 @@ spec:
             - $repo/{{ .namespace }}/{{ .name }}/values.yaml
         - repoURL: https://github.com/zocimek/argocd-test.git
           targetRevision: main
+          path: kubernetes/apps
           ref: repo
         {{- end }}
         {{- if .withKustomize }}
