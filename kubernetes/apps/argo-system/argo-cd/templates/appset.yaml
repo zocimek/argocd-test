@@ -42,7 +42,7 @@ spec:
           helm:
             releaseName: "{{ .name }}"
             valueFiles:
-            - $repo/{{ .namespace }}/{{ .name }}/values.yaml
+            - $repo/kubernetes/apps/{{ .namespace }}/{{ .name }}/values.yaml
         {{- end }}
         {{- if .withKustomize }}
         - repoURL: {{ .repoURL | default "https://github.com/zocimek/argocd-test.git" }}
