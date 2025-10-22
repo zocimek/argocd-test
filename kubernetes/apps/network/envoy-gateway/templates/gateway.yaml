@@ -4,12 +4,12 @@ kind: Gateway
 metadata:
   name: envoy-internal
   annotations:
-    external-dns.alpha.kubernetes.io/target: "internal.ad.pospiech.dev"
+    external-dns.alpha.kubernetes.io/target: "internal.lpo-lab.dev"
 spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      external-dns.alpha.kubernetes.io/hostname: "internal.ad.pospiech.dev"
+      external-dns.alpha.kubernetes.io/hostname: "internal.lpo-lab.dev"
       lbipam.cilium.io/ips: "10.2.128.239"
   listeners:
     - name: http
@@ -35,12 +35,12 @@ kind: Gateway
 metadata:
   name: envoy-external
   annotations:
-    external-dns.alpha.kubernetes.io/target: "external.ad.pospiech.dev"
+    external-dns.alpha.kubernetes.io/target: "external.lpo-lab.dev"
 spec:
   gatewayClassName: envoy
   infrastructure:
     annotations:
-      external-dns.alpha.kubernetes.io/hostname: "external.ad.pospiech.dev"
+      external-dns.alpha.kubernetes.io/hostname: "external.lpo-lab.dev"
       lbipam.cilium.io/ips: "10.2.128.238"
   listeners:
     - name: http

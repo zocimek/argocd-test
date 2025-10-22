@@ -53,7 +53,7 @@ stringData:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cloudflare-issuer-secret
-  namespace: cert-manager
+  name: vault-role-secret
+  namespace: external-secrets
 stringData:
-  CF_API_KEY: {{ ENV.CLOUDFLARE_DNS_TOKEN }}
+  secret-id: {{ ENV.VAULT_ROLE_SECRET_ID }}

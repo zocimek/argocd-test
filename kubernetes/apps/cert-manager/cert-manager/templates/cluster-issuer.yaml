@@ -16,4 +16,4 @@ spec:
               key: CLOUDFLARE_DNS_TOKEN
         selector:
           dnsZones:
-            - "{{ global.rootDomai
+            - "lpo-lab.dev"

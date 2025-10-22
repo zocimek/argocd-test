@@ -13,19 +13,7 @@ controller := `talosctl config info -o yaml | yq -e '.endpoints[0]'`
 nodes := `talosctl config info -o yaml | yq -e '.nodes | join (" ")'`
 
 [private]
-default: talos k8s (kubeconfig "node") wait
-# default: talos k8s (kubeconfig "node") wait namespaces resources crds apps kubeconfig
-
-[doc('Initialization of secrets, talconfig and worker machines')]
-gen-talconfig:
-    just log info "Running stage..." "stage" "$0"
-    for n in {{ nodes }}; do \
-        just log info "Processing node" "stage" "$0" "node" "$n"; \
-        just talos render-config "$n" | tee "{{justfile_directory()}}/talos/clusterconfig/$n.yaml"; \
-    done
-
-    talosctl gen config --with-secrets {{ talos_dir }}/talsecret.sops.yaml --output-types talosconfig -o {{talos_dir}}/talosconfig main https://{{ controller }}:50000 --force
-
+default: talos k8s (kubeconfig "node") wait resources crds apps kubeconfig
 
 [doc('Install Talos')]
 talos:

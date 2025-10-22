@@ -22,7 +22,7 @@ machine-controller node:
 
 # [private]
 template file *args:
-    eval "$(vault kv get -format=json -mount=secrets kubernetes | jq -r '.data.data | to_entries[] | "export \(.key)=\(.value|@sh)"')" && \
+    eval "$(vault kv get -format=json -mount=secrets kubernetes/bootstrap | jq -r '.data.data | to_entries[] | "export \(.key)=\(.value|@sh)"')" && \
         minijinja-cli "{{ file }}" {{ args }}
 # gomplate -d vault=vault:///kv2 --file "{{ file }}" {{ args }}
 
