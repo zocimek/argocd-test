@@ -56,4 +56,5 @@ metadata:
   name: vault-role-secret
   namespace: external-secrets
 stringData:
+  role-id: {{ ENV.VAULT_ROLE_ID }}
   secret-id: {{ ENV.VAULT_ROLE_SECRET_ID }}
