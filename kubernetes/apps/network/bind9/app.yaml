@@ -1,7 +1,0 @@
----
-# yaml-language-server: $schema=../../../../schemas/argocd.json
-namespace: network
-name: bind9
-repoURL: oci://ghcr.io/bjw-s-labs/helm/app-template
-version: 4.4.0
-psp: restricted
