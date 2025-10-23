@@ -11,7 +11,7 @@ spec:
     solvers:
       - dns01:
           rfc2136:
-            nameserver: bind9.network.svc.cluster.local:53
+            nameserver: bind9-dns-udp.network.svc.cluster.local:53
             tsigKeyName: cm-acme
             tsigAlgorithm: HMACSHA512
             tsigSecretSecretRef:
