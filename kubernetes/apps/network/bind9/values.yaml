@@ -1,0 +1,156 @@
+---
+controllers:
+  bind:
+    replicas: 1
+    containers:
+      bind:
+        image:
+          repository: internetsystemsconsortium/bind9
+          tag: "9.18"
+          pullPolicy: IfNotPresent
+        command:
+          - "/usr/sbin/named"
+          - "-g"
+          - "-c"
+          - "/etc/bind/named.conf"
+          - "-u"
+          - "root"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - "ALL"
+            add:
+              - "NET_BIND_SERVICE"
+        resources:
+          requests: {cpu: 50m, memory: 64Mi}
+          limits: {memory: 256Mi}
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - "sh"
+                  - "-c"
+                  - "dig +time=2 +tries=1 @127.0.0.1 SOA ZONE_NAME | grep -qi 'SOA'"
+              initialDelaySeconds: 5
+              periodSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              exec:
+                command:
+                  - "sh"
+                  - "-c"
+                  - "dig +time=2 +tries=1 @127.0.0.1 NS ZONE_NAME | grep -qi 'NS'"
+              initialDelaySeconds: 3
+              periodSeconds: 10
+        ports:
+          - name: dns-tcp
+            containerPort: 53
+            protocol: TCP
+          - name: dns-udp
+            containerPort: 53
+            protocol: UDP
+        volumeMounts:
+          - name: named-conf
+            mountPath: /etc/bind/named.conf
+            subPath: named.conf
+            readOnly: true
+          - name: zone-file
+            mountPath: /var/lib/bind/db.zone
+            subPath: db.zone
+            readOnly: false
+          - name: tsig-key
+            mountPath: /etc/bind/keys/tsig.key
+            subPath: tsig.key
+            readOnly: true
+    pod:
+      dnsPolicy: ClusterFirstWithHostNet # keep ClusterFirst if you don't use hostNetwork
+      # hostNetwork: true   # <-- only if you prefer binding directly on node IPs
+
+service:
+  dns-tcp:
+    controller: bind
+    enabled: true
+    type: LoadBalancer
+    annotations:
+      lbipam.cilium.io/ips: "10.2.128.236"
+    ports:
+      dns-tcp:
+        port: 53
+        protocol: TCP
+        targetPort: dns-tcp
+  dns-udp:
+    controller: bind
+    enabled: true
+    type: LoadBalancer
+    annotations:
+      lbipam.cilium.io/ips: "10.2.128.236"
+    ports:
+      dns-udp:
+        port: 53
+        protocol: UDP
+        targetPort: dns-udp
+
+# No persistence (ephemeral zone)
+persistence:
+  enabled: false
+  # app-template still needs named volumes for mounts; use configMaps/Secrets below
+  extraVolumes:
+    - name: named-conf
+      configMap:
+        name: bind-named-conf
+    - name: zone-file
+      configMap:
+        name: bind-zone
+    - name: tsig-key
+      secret:
+        secretName: bind-tsig
+
+# Ship BIND config and zone via ConfigMaps
+configMaps:
+  bind-named-conf:
+    enabled: true
+    data:
+      named.conf: |
+        options {
+          directory "/var/lib/bind";
+          recursion no;
+          allow-query { any; };
+          listen-on port 53 { any; };
+          listen-on-v6 { none; };
+          minimal-responses yes;
+          rate-limit { responses-per-second 20; };
+        };
+
+        include "/etc/bind/keys/tsig.key";
+
+        # TSIG-protected dynamic zone for ACME
+        zone "_acme-challenge.lpo-lab.dev" {
+          type master;
+          file "/var/lib/bind/db.zone";
+          update-policy {
+            grant cm-acme zonesub txt;
+          };
+          allow-transfer { none; };
+        };
+
+  bind-zone:
+    enabled: true
+    data:
+      db.zone: |
+        $TTL 300
+        @   IN  SOA ns._acme-challenge.lpo-lab.dev. hostmaster.lpo-lab.dev. (
+                1       ; serial
+                3600    ; refresh
+                600     ; retry
+                604800  ; expire
+                300 )   ; minimum
+            IN  NS  ns._acme-challenge.lpo-lab.dev.
+
+      # RBAC not needed; no sidecars
