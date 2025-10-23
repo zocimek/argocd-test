@@ -4,6 +4,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: home-ops-apps
+  namespace: argo-system
 spec:
   goTemplate: true
   goTemplateOptions:
