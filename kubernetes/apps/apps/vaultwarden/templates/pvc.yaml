@@ -4,10 +4,10 @@ metadata:
   name: vaultwarden
 spec:
   storageClassName: openebs-hostpath
-  dataSourceRef:
-    kind: ReplicationDestination
-    apiGroup: volsync.backube
-    name: vaultwarden-dst
+  # dataSourceRef:
+  #   kind: ReplicationDestination
+  #   apiGroup: volsync.backube
+  #   name: vaultwarden-dst
   accessModes:
     - ReadWriteOnce
   resources:
