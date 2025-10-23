@@ -1,0 +1,47 @@
+---
+fullnameOverride: ad-dns
+provider:
+  name: rfc2136
+env:
+  - name: KRB5_KTNAME
+    value: /etc/krb5/externaldns.keytab
+  - name: KRB5_CONFIG
+    value: /etc/krb5/krb5.conf
+
+extraArgs:
+  - --rfc2136-host=ad01.lpo-lab.dev
+  - --rfc2136-port=53
+  - --rfc2136-zone=lpo-lab.dev
+  - --rfc2136-gss-tsig
+  - --rfc2136-kerberos-realm=LPO-LAB.DEV
+  - --rfc2136-kerberos-username=svc-external-dns@LPO-LAB.DEV
+  - --rfc2136-kerberos-keytab=/etc/krb5/externaldns.keytab
+  - --rfc2136-kerberos-config=/etc/krb5/krb5.conf
+  - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
+  - --crd-source-kind=DNSEndpoint
+  - --zone-id-filter=$(CF_ZONE_ID)
+triggerLoopOnEvent: true
+policy: sync
+sources:
+  - crd
+  - gateway-httproute
+  - service
+txtOwnerId: default
+txtPrefix: k8s.
+domainFilters:
+  - lpo-lab.dev
+serviceMonitor:
+  enabled: true
+podAnnotations:
+  secret.reloader.stakater.com/reload: auto
+
+extraVolumes:
+  - name: krb
+    secret:
+      secretName: externaldns-kerberos
+      defaultMode: 0400
+
+extraVolumeMounts:
+  - name: krb
+    mountPath: /etc/krb5
+    readOnly: true
