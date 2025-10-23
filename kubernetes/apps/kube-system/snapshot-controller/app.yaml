@@ -4,3 +4,4 @@ name: snapshot-controller
 repoURL: oci://ghcr.io/piraeusdatastore/helm-charts/snapshot-controller
 version: 4.1.1
 psp: restricted
+serverSideApply: true
