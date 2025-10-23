@@ -1,0 +1,6 @@
+---
+namespace: openebs-system
+name: openebs
+repoURL: oci://ghcr.io/home-operations/charts-mirror/openebs
+version: 4.3.3
+psp: restricted
