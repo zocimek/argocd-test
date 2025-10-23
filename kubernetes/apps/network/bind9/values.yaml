@@ -137,12 +137,12 @@ configMaps:
     enabled: true
     data:
       db.zone: |
-        $TTL 300
+        $TTL 10
         @   IN SOA ns-acme01.lpo.dev. hostmaster.lpo.dev. (
-                3       ; serial (bump)
+                10       ; serial (bump)
                 3600
                 600
                 604800
-                300 )
+                10 )
             IN NS ns-acme01.lpo.dev.
       # RBAC not needed; no sidecars
