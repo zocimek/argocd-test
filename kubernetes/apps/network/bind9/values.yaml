@@ -138,14 +138,11 @@ configMaps:
     data:
       db.zone: |
         $TTL 300
-        @   IN SOA ns._acme-challenge.lpo.dev. hostmaster.lpo.dev. (
+        @   IN SOA ns-acme01.lpo.dev. hostmaster.lpo.dev. (
                 3       ; serial (bump)
                 3600
                 600
                 604800
                 300 )
-            IN NS ns._acme-challenge.lpo.dev.
-
-        ; the missing address record (this fixes your error)
-        ns  IN A 10.2.128.236
+            IN NS ns-acme01.lpo.dev.
       # RBAC not needed; no sidecars
