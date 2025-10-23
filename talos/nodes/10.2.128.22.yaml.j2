@@ -1,0 +1,28 @@
+---
+machine:
+  network:
+    hostname: k8s-worker-03
+    interfaces:
+      - interface: eth0
+#        mtu: 9000
+        dhcp: false
+        addresses:
+          - 10.2.128.22/17
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.2.128.1
+    extraHostEntries:
+      - ip: 10.2.128.9
+        aliases: ["k8s.internal"]
+  nodeLabels:
+    topology.kubernetes.io/zone: pve
+  type: worker
+
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-hostpath
+provisioning:
+  diskSelector:
+    match: disk.dev_path == '/dev/vdb'
+  minSize: 50GB
