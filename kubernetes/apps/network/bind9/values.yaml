@@ -1,54 +1,29 @@
 ---
+defaultPodOptions:
+  securityContext:
+    fsGroup: 101
 controllers:
   bind:
     replicas: 1
     containers:
       bind:
         image:
-          repository: internetsystemsconsortium/bind9
-          tag: "9.18"
+          repository: ubuntu/bind9
+          tag: 9.18-22.04_beta@sha256:29378a263f22311f6a4f11fa9119182655244af17fca16a3e1993a3d0abe7abf
           pullPolicy: IfNotPresent
-        command:
-          - "/usr/sbin/named"
-          - "-g"
-          - "-c"
-          - "/etc/bind/named.conf"
-          - "-u"
-          - "root"
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop:
-              - "ALL"
-            add:
-              - "NET_BIND_SERVICE"
         resources:
           requests: {cpu: 50m, memory: 64Mi}
           limits: {memory: 256Mi}
         probes:
           liveness:
             enabled: true
-            custom: true
-            spec:
-              exec:
-                command:
-                  - "sh"
-                  - "-c"
-                  - "dig +time=2 +tries=1 @127.0.0.1 SOA ZONE_NAME | grep -qi 'SOA'"
-              initialDelaySeconds: 5
-              periodSeconds: 10
           readiness:
             enabled: true
-            custom: true
+          startup:
+            enabled: true
             spec:
-              exec:
-                command:
-                  - "sh"
-                  - "-c"
-                  - "dig +time=2 +tries=1 @127.0.0.1 NS ZONE_NAME | grep -qi 'NS'"
-              initialDelaySeconds: 3
-              periodSeconds: 10
+              failureThreshold: 30
+              periodSeconds: 5
         ports:
           - name: dns-tcp
             containerPort: 53
@@ -78,6 +53,7 @@ service:
     controller: bind
     enabled: true
     type: LoadBalancer
+    externalTrafficPolicy: Cluster
     annotations:
       lbipam.cilium.io/ips: "10.2.128.236"
     ports:
@@ -103,14 +79,26 @@ persistence:
     enabled: true
     type: configMap
     identifier: bind-named-conf
+    globalMounts:
+      - path: /etc/bind/named.conf
+        subPath: named.conf
+        readOnly: true
   db-zone:
     enabled: true
     type: configMap
     identifier: bind-zone
+    globalMounts:
+      - path: /var/lib/bind/db.zone
+        subPath: db.zone
+        readOnly: true
   tsig-key:
     enabled: true
     type: secret
     name: bind9-tsig
+    globalMounts:
+      - path: /etc/bind/keys/tsig.key
+        subPath: tsig.key
+        readOnly: true
 
 # Ship BIND config and zone via ConfigMaps
 configMaps:
