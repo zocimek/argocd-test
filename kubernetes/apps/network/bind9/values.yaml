@@ -124,7 +124,7 @@ configMaps:
         include "/etc/bind/keys/tsig.key";
 
         # TSIG-protected dynamic zone for ACME
-        zone "_acme-challenge.lpo.dev" {
+        zone "_acme-challenge.lpo-lab.dev" {
           type master;
           file "/var/lib/bind/db.zone";
           update-policy {
@@ -138,11 +138,11 @@ configMaps:
     data:
       db.zone: |
         $TTL 10
-        @   IN SOA ns-acme01.lpo.dev. hostmaster.lpo.dev. (
+        @   IN SOA ns-acme01.lpo-lab.dev. hostmaster.lpo-lab.dev. (
                 10       ; serial (bump)
                 3600
                 600
                 604800
                 10 )
-            IN NS ns-acme01.lpo.dev.
+            IN NS ns-acme01.lpo-lab.dev.
       # RBAC not needed; no sidecars

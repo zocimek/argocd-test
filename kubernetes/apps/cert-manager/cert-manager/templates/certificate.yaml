@@ -9,7 +9,7 @@ spec:
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
-  commonName: lpo.dev
+  commonName: lpo-lab.dev
   dnsNames:
-    - lpo.dev
-    - "*.lpo.dev"
+    - lpo-lab.dev
+    - "*.lpo-lab.dev"
