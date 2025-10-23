@@ -56,6 +56,7 @@ service:
     externalTrafficPolicy: Cluster
     annotations:
       lbipam.cilium.io/ips: "10.2.128.236"
+      lbipam.cilium.io/sharing-key: "10.2.128.236"
     ports:
       dns-tcp:
         port: 53
@@ -65,8 +66,10 @@ service:
     controller: bind
     enabled: true
     type: LoadBalancer
+    externalTrafficPolicy: Cluster
     annotations:
       lbipam.cilium.io/ips: "10.2.128.236"
+      lbipam.cilium.io/sharing-key: "10.2.128.236"
     ports:
       dns-udp:
         port: 53
