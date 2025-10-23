@@ -38,7 +38,7 @@ podAnnotations:
 extraVolumes:
   - name: krb
     secret:
-      secretName: externaldns-kerberos
+      secretName: kerberos-config
       defaultMode: 0400
 
 extraVolumeMounts:
