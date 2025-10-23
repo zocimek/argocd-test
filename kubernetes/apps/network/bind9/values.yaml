@@ -117,6 +117,8 @@ configMaps:
           listen-on-v6 { none; };
           minimal-responses yes;
           rate-limit { responses-per-second 20; };
+
+          check-names master ignore;
         };
 
         include "/etc/bind/keys/tsig.key";
