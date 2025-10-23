@@ -4,3 +4,4 @@ name: volsync
 repoURL: oci://ghcr.io/home-operations/charts-mirror/volsync-perfectra1n
 version: 0.17.14
 psp: restricted
+serverSideApply: true
