@@ -18,6 +18,7 @@ extraArgs:
   - --rfc2136-gss-tsig
   - --rfc2136-kerberos-realm=LPO-LAB.DEV
   - --rfc2136-kerberos-username=svc-external-dns@lpo-lab.dev
+  - --rfc2136-tsig-axfr
   - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
   - --crd-source-kind=DNSEndpoint
   - --zone-id-filter=$(CF_ZONE_ID)
