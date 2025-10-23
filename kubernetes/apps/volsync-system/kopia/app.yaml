@@ -1,0 +1,6 @@
+---
+namespace: volsync-system
+name: kopia
+repoURL: oci://ghcr.io/bjw-s-labs/helm/app-template
+version: 4.4.0
+psp: restricted
