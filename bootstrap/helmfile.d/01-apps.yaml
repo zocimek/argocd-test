@@ -63,7 +63,7 @@ releases:
       - kube-system/spegel
     hooks:
       - events:
-          - "cleanup"
+          - "postsync"
         command: bash
         args:
           - -c

@@ -5,7 +5,7 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: pool
 spec:
-  allowFirstLastIPs: "Yes"
+  allowFirstLastIPs: true
   blocks:
     - start: 10.2.128.230
       stop: 10.2.128.255
@@ -36,7 +36,7 @@ metadata:
     lbipam.cilium.io/ips: 10.2.128.235
 spec:
   type: LoadBalancer
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
   selector:
     k8s-app: kube-apiserver
     tier: control-plane

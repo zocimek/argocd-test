@@ -44,7 +44,7 @@ kubeconfig lb="cilium":
         just log fatal "Failed to fetch kubeconfig" "stage" "$0"; \
     fi
     if [[ "{{ lb }}" != "cilium" ]]; then \
-        if ! kubectl config set-cluster main --server "https://{{ controller }}:6443"; then \
+        if ! kubectl config set-cluster garagefarm --server "https://{{ controller }}:6443"; then \
             just log fatal "Failed to set kubectl cluster server address" "stage" "$0"; \
         fi; \
     fi
