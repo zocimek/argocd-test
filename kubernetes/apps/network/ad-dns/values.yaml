@@ -3,10 +3,11 @@ fullnameOverride: ad-dns
 provider:
   name: rfc2136
 env:
-  - name: KRB5_KTNAME
-    value: /etc/krb5/externaldns.keytab
-  - name: KRB5_CONFIG
-    value: /etc/krb5/krb5.conf
+  - name: EXTERNAL_DNS_RFC2136_KERBEROS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: kerberos-config
+        key: dns-password
 
 extraArgs:
   - --rfc2136-host=ad01.lpo-lab.dev
@@ -41,5 +42,6 @@ extraVolumes:
 
 extraVolumeMounts:
   - name: krb
-    mountPath: /etc/krb5
+    mountPath: /etc/krb5/krb5.conf
+    subPath: krb5.conf
     readOnly: true
