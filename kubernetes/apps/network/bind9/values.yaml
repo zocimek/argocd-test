@@ -56,19 +56,19 @@ controllers:
           - name: dns-udp
             containerPort: 53
             protocol: UDP
-        volumeMounts:
-          - name: named-conf
-            mountPath: /etc/bind/named.conf
-            subPath: named.conf
-            readOnly: true
-          - name: zone-file
-            mountPath: /var/lib/bind/db.zone
-            subPath: db.zone
-            readOnly: false
-          - name: tsig-key
-            mountPath: /etc/bind/keys/tsig.key
-            subPath: tsig.key
-            readOnly: true
+            # volumeMounts:
+            #   - name: named-conf
+            #     mountPath: /etc/bind/named.conf
+            #     subPath: named.conf
+            #     readOnly: true
+            #   - name: zone-file
+            #     mountPath: /var/lib/bind/db.zone
+            #     subPath: db.zone
+            #     readOnly: false
+            #   - name: tsig-key
+            #     mountPath: /etc/bind/keys/tsig.key
+            #     subPath: tsig.key
+            #     readOnly: true
     pod:
       dnsPolicy: ClusterFirstWithHostNet # keep ClusterFirst if you don't use hostNetwork
       # hostNetwork: true   # <-- only if you prefer binding directly on node IPs
