@@ -124,7 +124,7 @@ configMaps:
         include "/etc/bind/keys/tsig.key";
 
         # TSIG-protected dynamic zone for ACME
-        zone "_acme-challenge.lpo-lab.dev" {
+        zone "_acme-challenge.lpo.dev" {
           type master;
           file "/var/lib/bind/db.zone";
           update-policy {
@@ -138,12 +138,14 @@ configMaps:
     data:
       db.zone: |
         $TTL 300
-        @   IN  SOA ns._acme-challenge.lpo-lab.dev. hostmaster.lpo-lab.dev. (
-                1       ; serial
-                3600    ; refresh
-                600     ; retry
-                604800  ; expire
-                300 )   ; minimum
-            IN  NS  ns._acme-challenge.lpo-lab.dev.
+        @   IN SOA ns._acme-challenge.lpo.dev. hostmaster.lpo.dev. (
+                3       ; serial (bump)
+                3600
+                600
+                604800
+                300 )
+            IN NS ns._acme-challenge.lpo.dev.
 
+        ; the missing address record (this fixes your error)
+        ns  IN A 10.2.128.236
       # RBAC not needed; no sidecars
