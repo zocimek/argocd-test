@@ -99,18 +99,18 @@ service:
 
 # No persistence (ephemeral zone)
 persistence:
-  enabled: false
-  # app-template still needs named volumes for mounts; use configMaps/Secrets below
-  extraVolumes:
-    - name: named-conf
-      configMap:
-        name: bind-named-conf
-    - name: zone-file
-      configMap:
-        name: bind-zone
-    - name: tsig-key
-      secret:
-        secretName: bind-tsig
+  named-conf:
+    enabled: true
+    type: configMap
+    name: bind-named-conf
+  db-zone:
+    enabled: true
+    type: configMap
+    name: bind-zone
+  tsig-key:
+    enabled: true
+    type: secret
+    name: bind-tsig
 
 # Ship BIND config and zone via ConfigMaps
 configMaps:
