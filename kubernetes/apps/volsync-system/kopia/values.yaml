@@ -83,7 +83,7 @@ persistence:
         subPath: repository.config
   repository:
     type: nfs
-    server: nas01.internal
+    server: nas01.pospiech.dev
     path: /mnt/data/test/kopia
     globalMounts:
       - path: /repository

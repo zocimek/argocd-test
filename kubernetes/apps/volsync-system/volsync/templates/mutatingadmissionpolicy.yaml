@@ -108,7 +108,7 @@ spec:
               value: Object.spec.template.spec.volumes{
                 name: "repository",
                 nfs: Object.spec.template.spec.volumes.nfs{
-                  server: "nas01.internal",
+                  server: "nas01.pospiech.dev",
                   path: "/mnt/data/test/kopia"
                 }
               }
