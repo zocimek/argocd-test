@@ -40,7 +40,7 @@ k8s:
 [doc('Fetch kubeconfig')]
 kubeconfig lb="cilium":
     just log info "Running stage..." "stage" "$0"
-    if ! talosctl kubeconfig -n "{{ controller }}" -f --force-context-name main {{ justfile_dir() }}; then \
+    if ! talosctl kubeconfig -n "{{ controller }}" -f --force-context-name garagefarm {{ justfile_dir() }}; then \
         just log fatal "Failed to fetch kubeconfig" "stage" "$0"; \
     fi
     if [[ "{{ lb }}" != "cilium" ]]; then \
@@ -85,6 +85,6 @@ crds:
 [doc('Apply Helmfile Apps')]
 apps:
     just log info "Running stage..." "stage" "$0"
-    if ! helmfile --debug -f "{{ bootstrap_dir }}/helmfile.d/01-apps.yaml" sync --hide-notes; then \
+    if ! helmfile -f "{{ bootstrap_dir }}/helmfile.d/01-apps.yaml" sync --hide-notes; then \
         just log fatal "Failed to sync helmfile" "stage" "$0"; \
     fi
