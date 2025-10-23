@@ -102,15 +102,15 @@ persistence:
   named-conf:
     enabled: true
     type: configMap
-    name: bind-named-conf
+    identifier: bind-named-conf
   db-zone:
     enabled: true
     type: configMap
-    name: bind-zone
+    identifier: bind-zone
   tsig-key:
     enabled: true
     type: secret
-    name: bind-tsig
+    name: bind9-tsig
 
 # Ship BIND config and zone via ConfigMaps
 configMaps:
