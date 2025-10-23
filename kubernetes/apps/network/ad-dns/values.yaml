@@ -17,7 +17,7 @@ extraArgs:
   - --rfc2136-port=53
   - --rfc2136-zone=lpo-lab.dev
   - --rfc2136-kerberos-realm=LPO-LAB.DEV
-  - --rfc2136-kerberos-username=svc-external-dns
+  - --rfc2136-kerberos-username=svc-external-dns@LPO-LAB.DEV
   - --rfc2136-tsig-axfr
   - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
   - --crd-source-kind=DNSEndpoint
