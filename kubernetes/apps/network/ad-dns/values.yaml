@@ -8,6 +8,8 @@ env:
       secretKeyRef:
         name: kerberos-config
         key: dns-password
+  - name: KRB5_CONFIG
+    value: /etc/krb5/krb5.conf
 
 extraArgs:
   - --rfc2136-host=ad01.lpo-lab.dev
