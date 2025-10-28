@@ -21,7 +21,7 @@ controllers:
           tag: alpine-7.4.3
         env:
           TZ: Europe/Warsaw
-          ZBX_HOSTNAME: "zabbix-server"
+          # ZBX_HOSTNAME: "zabbix-server"
           ZBX_CACHESIZE: 128M
           ZBX_HISTORYCACHESIZE: 64M
           ZBX_HISTORYINDEXCACHESIZE: 32M
