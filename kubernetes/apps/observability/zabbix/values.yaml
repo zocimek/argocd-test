@@ -148,8 +148,8 @@ controllers:
     containers:
       app:
         image:
-          repository: zabbix/zabbix-server-pgsql
-          tag: alpine-7.4.3
+          repository: ghcr.io/zabbix-community/zabbix-server-create-upgrade-db
+          tag: 7.4-20250802113243
         args:
           - init_db_only
         env:
