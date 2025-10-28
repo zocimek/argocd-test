@@ -99,11 +99,6 @@ controllers:
           tag: alpine-7.4.3
         env:
           TZ: Europe/Warsaw
-          ZBX_HOSTNAME:
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          ZBX_HOSTMETADATA: "env=k8s;role=node"
           ZBX_SERVER_HOST: "zabbix-server"
           ZBX_SERVER_PORT: "10051"
           ZBX_ACTIVESERVERS: "zabbix-server:10051"
@@ -138,8 +133,13 @@ controllers:
           tag: alpine-7.4.3
         env:
           ZBX_SERVER_HOST: zabbix-server
-          # ZBX_HOSTNAMEITEM: system.hostname
-          # ZBX_ACTIVESERVERS: zabbix-server:10051
+          ZBX_HOSTNAMEITEM: system.hostname
+          ZBX_HOSTMETADATA: "env=k8s;role=node"
+          ZBX_HOSTNAME:
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+                # ZBX_ACTIVESERVERS: zabbix-server:10051
         ports:
           - name: agent
             containerPort: 10050
