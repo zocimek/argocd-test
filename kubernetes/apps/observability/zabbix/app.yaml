@@ -1,5 +1,5 @@
 ---
-namespace: apps
+namespace: observability
 name: zabbix
 repoURL: oci://ghcr.io/bjw-s-labs/helm/app-template
 version: 4.4.0
