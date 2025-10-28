@@ -111,7 +111,7 @@ controllers:
           ZBX_HOSTNAME:
             valueFrom:
               fieldRef:
-                fieldPath: spec.nodeName
+                fieldPath: metadata.name
           ZBX_SERVER_HOST: "127.0.0.1"
           ZBX_SERVER_PORT: "10051"
           # ZBX_ACTIVESERVERS: "zabbix-server:10051"
