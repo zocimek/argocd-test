@@ -1,6 +1,5 @@
 ---
 name: crunchy-postgres-operator
 namespace: database
-repoURL: oci://registry.developers.crunchydata.com/crunchydata
-chartName: pgo
+repoURL: oci://registry.developers.crunchydata.com/crunchydata/pgo
 version: 5.8.3
