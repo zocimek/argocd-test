@@ -1,0 +1,5 @@
+---
+name: crunchy-users
+namespace: database
+repoURL: oci://ghcr.io/henrywhitaker3/crunchy-users-helm
+version: 1.0.7
