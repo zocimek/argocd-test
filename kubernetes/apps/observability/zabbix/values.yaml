@@ -192,6 +192,7 @@ controllers:
           POSTGRES_USER: *dbUser
           POSTGRES_PASSWORD: *dbPassword
           POSTGRES_DB: *dbName
+          ZBX_SERVER_DEPLOYMENT_NAME: zabbix-server
           HELM_HOOK_TYPE:
             value: |-
               {{- if .Release.IsUpgrade -}}
