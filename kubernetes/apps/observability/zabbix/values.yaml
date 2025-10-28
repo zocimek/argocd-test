@@ -29,21 +29,21 @@ controllers:
           ZBX_VALUECACHESIZE: 128M
           DB_SERVER_HOST:
             valueFrom:
-              secretKeyRef:
+              secretRef:
                 name: zabbix-secret
                 key: db_host
           DB_SERVER_PORT:
             valueFrom:
-              secretKeyRef:
+              secretRef:
                 name: zabbix-secret
           POSTGRES_USER:
             valueFrom:
-              secretKeyRef:
+              secretRef:
                 name: zabbix-secret
                 key: db_user
           POSTGRES_PASSWORD:
             valueFrom:
-              secretKeyRef:
+              secretRef:
                 name: zabbix-secret
                 key: db_password
         envFrom:
