@@ -56,7 +56,8 @@ spec:
         type: AlphaNumeric
     # Applications
     - name: zabbix
-      databases: zabbix
+      databases:
+        - zabbix
       password:
         type: AlphaNumeric
 
