@@ -1,0 +1,181 @@
+---
+defaultPodOptions:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1997
+    runAsGroup: 1997
+    fsGroup: 1997
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile:
+      type: RuntimeDefault
+
+controllers:
+  zabbix-server:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      app:
+        image:
+          repository: zabbix/zabbix-server-pgsql
+          tag: alpine-7.0-latest
+        env:
+          TZ: Europe/Warsaw
+          # DB_SERVER_HOST: zabbix-postgresql
+          # DB_SERVER_PORT: "5432"
+          ZBX_CACHESIZE: 128M
+          ZBX_HISTORYCACHESIZE: 64M
+          ZBX_HISTORYINDEXCACHESIZE: 32M
+          ZBX_TRENDCACHESIZE: 32M
+          ZBX_VALUECACHESIZE: 128M
+          DB_SERVER_HOST:
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-secret
+                key: db_host
+          DB_SERVER_PORT:
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-secret
+          POSTGRES_USER:
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-secret
+                key: db_user
+          POSTGRES_PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-secret
+                key: db_password
+        envFrom:
+          - secretRef:
+              name: zabbix-secret
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 10051
+              initialDelaySeconds: 30
+              periodSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              tcpSocket:
+                port: 10051
+              initialDelaySeconds: 15
+              periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+              - "ALL"
+        resources:
+          requests:
+            cpu: 200m
+            memory: 512Mi
+          limits:
+            memory: 1Gi
+
+  zabbix-web:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    containers:
+      app:
+        image:
+          repository: zabbix/zabbix-web-nginx-pgsql
+          tag: alpine-7.0-latest
+        env:
+          TZ: Europe/Warsaw
+          ZBX_SERVER_HOST: zabbix-server
+          ZBX_SERVER_PORT: "10051"
+          DB_SERVER_HOST: zabbix-postgresql
+          DB_SERVER_PORT: "5432"
+          PHP_TZ: Europe/Warsaw
+        envFrom:
+          - secretRef:
+              name: zabbix-secret
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 30
+              periodSeconds: 10
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 15
+              periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+              - "ALL"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            memory: 512Mi
+
+service:
+  zabbix-server:
+    controller: zabbix-server
+    ports:
+      server:
+        port: 10051
+        protocol: TCP
+
+  zabbix-web:
+    controller: zabbix-web
+    ports:
+      http:
+        port: 8080
+        protocol: TCP
+
+  zabbix-postgresql:
+    controller: zabbix-postgresql
+    ports:
+      postgresql:
+        port: 5432
+        protocol: TCP
+
+route:
+  web:
+    enabled: true
+    hostnames:
+      - zabbix.lpo-lab.dev
+    parentRefs:
+      - name: envoy-external
+        namespace: network
+    targetRef:
+      name: zabbix-web
+      port: 8080
+
+persistence:
+  zabbix-data:
+    type: persistentVolumeClaim
+    existingClaim: zabbix-data
+    advancedMounts:
+      zabbix-server:
+        app:
+          - path: /var/lib/zabbix
+
+  tmp:
+    type: emptyDir
+    medium: Memory
+    advancedMounts:
+      zabbix-web:
+        app:
+          - path: /tmp
