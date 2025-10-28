@@ -169,6 +169,6 @@ persistence:
     type: emptyDir
     medium: Memory
     advancedMounts:
-      zabbix-web:
+      web:
         app:
           - path: /tmp
