@@ -138,8 +138,8 @@ controllers:
           tag: alpine-7.4.3
         env:
           ZBX_SERVER_HOST: zabbix-server
-          ZBX_HOSTNAMEITEM: system.hostname
-          # ZBX_ACTIVESERVERS: zabbix-server:10051
+          # ZBX_HOSTNAMEITEM: system.hostname
+          ZBX_ACTIVESERVERS: zabbix-server:10051
         ports:
           - name: agent
             containerPort: 10050
