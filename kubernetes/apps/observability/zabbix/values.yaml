@@ -158,14 +158,14 @@ controllers:
           POSTGRES_PASSWORD: *dbPassword
           POSTGRES_DB: *dbName
           HELM_HOOK_TYPE:
-            value: |
-              {{- if .Release.IsUpgrade }}
+            value: |-
+              {{- if .Release.IsUpgrade -}}
               upgrade
-              {{- else if .Release.IsInstall }}
+              {{- else if .Release.IsInstall -}}
               install
-              {{- else }}
+              {{- else -}}
               unknown
-              {{- end }}
+              {{- end -}}
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
