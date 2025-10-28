@@ -157,13 +157,6 @@ service:
         port: 8080
         protocol: TCP
 
-  zabbix-postgresql:
-    controller: zabbix-postgresql
-    ports:
-      postgresql:
-        port: 5432
-        protocol: TCP
-
 route:
   web:
     enabled: true
