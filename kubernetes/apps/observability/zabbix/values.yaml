@@ -39,6 +39,11 @@ controllers:
               secretKeyRef:
                 name: zabbix-pguser-zabbix
                 key: port
+          POSTGRES_DB: &dbName
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-pguser-zabbix
+                key: dbname
           POSTGRES_USER: &dbUser
             valueFrom:
               secretKeyRef:
@@ -49,6 +54,7 @@ controllers:
               secretKeyRef:
                 name: zabbix-pguser-zabbix
                 key: password
+
         probes:
           liveness:
             enabled: true
@@ -93,6 +99,7 @@ controllers:
           ZBX_SERVER_PORT: "10051"
           DB_SERVER_HOST: *dbHost
           DB_SERVER_PORT: *dbPort
+          POSTGRES_DB: *dbName
           POSTGRES_USER: *dbUser
           POSTGRES_PASSWORD: *dbPassword
           PHP_TZ: Europe/Warsaw
@@ -128,6 +135,49 @@ controllers:
           limits:
             memory: 512Mi
 
+  dbMigration:
+    type: job
+    annotations:
+      "helm.sh/hook": pre-install,pre-upgrade
+      "helm.sh/hook-weight": "-5"
+      "helm.sh/hook-delete-policy": before-hook-creation
+    pod:
+      restartPolicy: OnFailure
+    containers:
+      app:
+        image:
+          repository: zabbix/zabbix-server-pgsql
+          tag: alpine-7.4.3
+        args:
+          - init_db_only
+        env:
+          TZ: Europe/Warsaw
+          DB_SERVER_HOST: *dbHost
+          DB_SERVER_PORT: *dbPort
+          POSTGRES_USER: *dbUser
+          POSTGRES_PASSWORD: *dbPassword
+          POSTGRES_DB: *dbName
+          HELM_HOOK_TYPE:
+            value: |
+              {{- if .Release.IsUpgrade }}
+              upgrade
+              {{- else if .Release.IsInstall }}
+              install
+              {{- else }}
+              unknown
+              {{- end }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+              - "ALL"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            memory: 512Mi
 service:
   server:
     controller: server
