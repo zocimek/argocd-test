@@ -22,7 +22,10 @@ controllers:
           tag: alpine-7.4.3
         env:
           TZ: Europe/Warsaw
-          ZBX_HOSTNAME: "zabbix-server"
+          ZBX_HOSTNAME:
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
 
           ZBX_CACHESIZE: 128M
           ZBX_HISTORYCACHESIZE: 64M
@@ -91,19 +94,33 @@ controllers:
             memory: 512Mi
           limits:
             memory: 1Gi
+        ports:
+          - name: server
+            containerPort: 10051
+          - name: agent
+            containerPort: 10050
+            protocol: TCP
 
       agent:
-        enabled: false
+        enabled: true
         image:
           repository: zabbix/zabbix-agent2
           tag: alpine-7.4.3
         env:
           TZ: Europe/Warsaw
-          ZBX_SERVER_HOST: "zabbix-server"
+          ZBX_HOSTNAME:
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          ZBX_SERVER_HOST: "127.0.0.1"
           ZBX_SERVER_PORT: "10051"
-          ZBX_ACTIVESERVERS: "zabbix-server:10051"
+          # ZBX_ACTIVESERVERS: "zabbix-server:10051"
           ZBX_DEBUGLEVEL: "3"
           ZBX_TIMEOUT: "4"
+        ports:
+          - name: agent
+            containerPort: 10050
+            protocol: TCP
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
@@ -145,6 +162,7 @@ controllers:
         ports:
           - name: agent
             containerPort: 10050
+            protocol: TCP
 
   web:
     annotations:
