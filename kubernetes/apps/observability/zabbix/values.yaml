@@ -184,7 +184,7 @@ controllers:
           repository: ghcr.io/zabbix-community/zabbix-server-create-upgrade-db
           tag: 7.4-20250802113243
         args:
-          - init_db_only
+          - init_and_upgrade_db
         env:
           TZ: Europe/Warsaw
           DB_SERVER_HOST: *dbHost
