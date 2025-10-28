@@ -141,7 +141,7 @@ controllers:
                 fieldPath: spec.nodeName
           ZBX_DEBUGLEVEL: 4
           # ZBX_ACTIVESERVERS: "zabbix-server:10051"
-          ZBX_FORCEACTIVECHECKSONSTART: "true"
+          ZBX_FORCEACTIVECHECKSONSTART: "1"
         ports:
           - name: agent
             containerPort: 10050
