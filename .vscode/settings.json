@@ -53,7 +53,11 @@
   "window.zoomLevel": 0,
   "yaml.schemaStore.enable": true,
   "yaml.schemas": {
-    "kubernetes": "./kubernetes/**/*.yaml"
+    "file:///Users/lukaszpospiech/.vscode/extensions/continue.continue-1.2.10-darwin-arm64/config-yaml-schema.json": [
+      ".continue/**/*.yaml"
+    ],
+    "kubernetes": "./kubernetes/**/*.yaml",
+    "https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-4.4.0/charts/library/common/values.schema.json": "file:///Users/lukaszpospiech/repos/garagefarm.net/kubernetes/kubernetes/apps/observability/zabbix/values.yaml"
   },
   "[yaml]": {
     "editor.defaultFormatter": "bluebrown.yamlfmt"

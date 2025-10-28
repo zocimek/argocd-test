@@ -165,6 +165,10 @@ route:
     parentRefs:
       - name: envoy-external
         namespace: network
+    rules:
+      - backendRefs:
+          - identifier: zabbix-web
+            port: 8080
 
 persistence:
   zabbix-data:
