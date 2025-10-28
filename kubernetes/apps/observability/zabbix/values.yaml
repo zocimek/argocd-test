@@ -196,6 +196,7 @@ controllers:
             memory: 512Mi
 
   dbMigration:
+    enabled: false
     type: job
     annotations:
       "helm.sh/hook": pre-install,pre-upgrade
