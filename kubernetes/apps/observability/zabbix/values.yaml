@@ -95,6 +95,7 @@ controllers:
             memory: 1Gi
 
       agent:
+        enabled: false
         image:
           repository: zabbix/zabbix-agent2
           tag: alpine-7.4.3
