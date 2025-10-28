@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-4.4.0/charts/library/common/values.schema.json
 defaultPodOptions:
   securityContext:
     runAsNonRoot: true
@@ -17,7 +18,7 @@ controllers:
       app:
         image:
           repository: zabbix/zabbix-server-pgsql
-          tag: alpine-7.0-latest
+          tag: alpine-7.4.3
         env:
           TZ: Europe/Warsaw
           # DB_SERVER_HOST: zabbix-postgresql
@@ -27,28 +28,27 @@ controllers:
           ZBX_HISTORYINDEXCACHESIZE: 32M
           ZBX_TRENDCACHESIZE: 32M
           ZBX_VALUECACHESIZE: 128M
+          POSTGRES_USE_IMPLICIT_SEARCH_PATH: true
           DB_SERVER_HOST:
             valueFrom:
-              secretRef:
+              secretKeyRef:
                 name: zabbix-secret
                 key: db_host
           DB_SERVER_PORT:
             valueFrom:
-              secretRef:
+              secretKeyRef:
                 name: zabbix-secret
+                key: db_port
           POSTGRES_USER:
             valueFrom:
-              secretRef:
+              secretKeyRef:
                 name: zabbix-secret
                 key: db_user
           POSTGRES_PASSWORD:
             valueFrom:
-              secretRef:
+              secretKeyRef:
                 name: zabbix-secret
                 key: db_password
-        envFrom:
-          - secretRef:
-              name: zabbix-secret
         probes:
           liveness:
             enabled: true
@@ -86,17 +86,30 @@ controllers:
       app:
         image:
           repository: zabbix/zabbix-web-nginx-pgsql
-          tag: alpine-7.0-latest
+          tag: alpine-7.4.3
         env:
           TZ: Europe/Warsaw
-          ZBX_SERVER_HOST: zabbix-server
-          ZBX_SERVER_PORT: "10051"
-          DB_SERVER_HOST: zabbix-postgresql
-          DB_SERVER_PORT: "5432"
+          ZBX_SERVER_HOST:
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-secret
+                key: zbx_server_host
+          ZBX_SERVER_PORT:
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-secret
+                key: zbx_server_port
+          DB_SERVER_HOST:
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-secret
+                key: db_host
+          DB_SERVER_PORT:
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-secret
+                key: db_port
           PHP_TZ: Europe/Warsaw
-        envFrom:
-          - secretRef:
-              name: zabbix-secret
         probes:
           liveness:
             enabled: true
@@ -159,9 +172,6 @@ route:
     parentRefs:
       - name: envoy-external
         namespace: network
-    targetRef:
-      name: zabbix-web
-      port: 8080
 
 persistence:
   zabbix-data:
