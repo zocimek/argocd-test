@@ -99,8 +99,8 @@ controllers:
           tag: alpine-7.4.3
         env:
           TZ: Europe/Warsaw
-          ZBX_HOSTNAME: "Zabbix server"
-          ZBX_SERVER_HOST: "0.0.0.0/0"
+          # ZBX_HOSTNAME: "Zabbix server"
+          ZBX_SERVER_HOST: "127.0.0.1"
           ZBX_SERVER_PORT: "10051"
           ZBX_PASSIVE_ALLOW: "true"
           ZBX_PASSIVESERVERS: "127.0.0.1"
@@ -193,15 +193,7 @@ controllers:
           POSTGRES_PASSWORD: *dbPassword
           POSTGRES_DB: *dbName
           ZBX_SERVER_DEPLOYMENT_NAME: zabbix-server
-          HELM_HOOK_TYPE:
-            value: |-
-              {{- if .Release.IsUpgrade -}}
-              upgrade
-              {{- else if .Release.IsInstall -}}
-              install
-              {{- else -}}
-              unknown
-              {{- end -}}
+          HELM_HOOK_TYPE: upgrade
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
