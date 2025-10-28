@@ -139,6 +139,8 @@ controllers:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
+          ZBX_DEBUGLEVEL: 4
+          ZBX_SERVER_ACTIVE: "zabbix-server:10051"
         ports:
           - name: agent
             containerPort: 10050
