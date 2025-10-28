@@ -100,7 +100,7 @@ controllers:
           tag: alpine-7.4.3
         env:
           TZ: Europe/Warsaw
-          ZBX_HOSTNAME: "zabbix-server"
+          ZBX_HOSTNAME: "zabbix-server-agent"
           ZBX_SERVER_HOST: "zabbix-server"
           ZBX_SERVER_PORT: "10051"
           # ZBX_ACTIVESERVERS: "zabbix-server"
