@@ -87,6 +87,31 @@ controllers:
           limits:
             memory: 1Gi
 
+      agent:
+        image:
+          repository: zabbix/zabbix-agent2
+          tag: alpine-7.4.3
+        env:
+          TZ: Europe/Warsaw
+          ZBX_HOSTNAME: "Zabbix server"
+          ZBX_SERVER_HOST: "127.0.0.1"
+          ZBX_SERVER_PORT: "10051"
+          ZBX_PASSIVE_ALLOW: "true"
+          ZBX_PASSIVESERVERS: "127.0.0.1"
+          ZBX_ACTIVE_ALLOW: "true"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            drop:
+              - "ALL"
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
+
   web:
     annotations:
       reloader.stakater.com/auto: "true"
