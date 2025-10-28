@@ -27,6 +27,7 @@ controllers:
           ZBX_HISTORYINDEXCACHESIZE: 32M
           ZBX_TRENDCACHESIZE: 32M
           ZBX_VALUECACHESIZE: 128M
+          ZABBIX_ALLOWEDACTIVE_SERVERS: "zabbix-server"
           POSTGRES_USE_IMPLICIT_SEARCH_PATH: "true"
           # Node address for HA mode
           ZBX_NODEADDRESS:
