@@ -12,6 +12,7 @@ defaultPodOptions:
 
 controllers:
   server:
+    type: statefulset
     annotations:
       reloader.stakater.com/auto: "true"
     containers:
@@ -22,6 +23,7 @@ controllers:
         env:
           TZ: Europe/Warsaw
           ZBX_HOSTNAME: "zabbix-server"
+
           ZBX_CACHESIZE: 128M
           ZBX_HISTORYCACHESIZE: 64M
           ZBX_HISTORYINDEXCACHESIZE: 32M
@@ -29,10 +31,6 @@ controllers:
           ZBX_VALUECACHESIZE: 128M
           POSTGRES_USE_IMPLICIT_SEARCH_PATH: "true"
           # Node address for HA mode
-          ZBX_NODEADDRESS:
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
           # Java Gateway settings
           ZBX_JAVAGATEWAY_ENABLE: "false"
           # Web Service settings
@@ -119,6 +117,21 @@ controllers:
             memory: 64Mi
           limits:
             memory: 128Mi
+
+  agent:
+    type: daemonset
+    containers:
+      app:
+        image:
+          repository: zabbix/zabbix-agent2
+          tag: alpine-7.4.3
+        env:
+          ZBX_SERVER_HOST: zabbix-server
+          ZBX_HOSTNAMEITEM: system.hostname
+          ZBX_ACTIVESERVERS: zabbix-server:10051
+        ports:
+          - name: agent
+            containerPort: 10050
 
   web:
     annotations:
