@@ -4,6 +4,7 @@ helmDefaults:
   cleanupOnFail: true
   wait: true
   waitForJobs: true
+
 releases:
   - name: cilium
     namespace: kube-system

@@ -6,7 +6,7 @@ spec:
   parentRefs:
     - name: envoy-internal
       namespace: network
-  hostnames: ["argo.lpo-lab.dev"]
+  hostnames: ["argocd.lpo-lab.dev"]
   rules:
     - backendRefs:
         - name: argo-cd-server

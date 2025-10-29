@@ -24,9 +24,3 @@ machine-controller node:
 template file *args:
     eval "$(vault kv get -format=json -mount=secrets kubernetes/bootstrap | jq -r '.data.data | to_entries[] | "export \(.key)=\(.value|@sh)"')" && \
         minijinja-cli "{{ file }}" {{ args }}
-# gomplate -d vault=vault:///kv2 --file "{{ file }}" {{ args }}
-
-vault2env:
-    just log info "Loading secrets from Vault..."
-
-    just log info "Secrets loaded."
